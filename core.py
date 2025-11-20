@@ -1,3 +1,35 @@
+'''
+APM: Kheyli awli
+
+Note 1 : 
+    fght dar fucntion create_account , vaghty card number ro misaze bayad
+    bere va tooye database begarde bebine in card number vojod nadashte bashe 
+    age vojod dahst ( khob nemish ecard number tkrari dad pas jadid hads mizane)
+    mishe az While estefade krd inja ( albate baraye porozhe niazi nist ama besoorate real world 
+    eshare kardam)
+
+
+Note 2 :
+    Print ha bayad ghable return bashand agar bekhahid ejra beshanavd (man sahih krdm dar tabeye withdraw()
+
+Note3 :
+    hamchenin bad az elif dar tabeye withdraw() , yek else gozashtam ke age mojodi kafi nabod
+    be moshtari bege k mojoodi nadari. hamin kar ra dar tavabeye digar piade konid (mesle transfer)
+
+Note4:
+    baraye tabeye show_transaction() , shoma bayad harjaee k deposit ya withdraw hast
+    yek data varede tabel transaction konid k hame pardakhti ha o hamechi sabt beshe
+    badesh avghty az show_transaction() estefade sho tamame record haye databse ro 
+    neshoon bede
+
+
+
+dar har koja az note ha agar moshkel ya soal dashtid haminja rahat beporsid
+moafagh bashid
+    
+
+'''
+
 from database import get_session
 from utils import hash_password, check_password
 from models import Customer, Account, Transaction
@@ -101,9 +133,15 @@ class AdminPanel:
         elif amount < account.balance:
             account.balance = account.balance - amount
             self.session.commit()
+            #** print ha bayad ghable return bashand ta ejra beshe
+            print(f"your account balance is: {account.balance}")
             return account
         #print()
-        print(f"your account balance is: {account.balance}")
+        #print(f"your account balance is: {account.balance}")
+        else:
+            print('your balance is not enough for withdraw')
+            return None
+    
 
 
     def transfer(self, from_account_id, to_account_id, amount):
@@ -120,6 +158,7 @@ class AdminPanel:
             to_account.balance += amount
             self.session.commit()
             return {'withdraw from': from_account_id, 'deposit to': to_account_id, 'amount': amount}
+        
 
     # '''
     #     account from --> pull balance+ --> farde dg
