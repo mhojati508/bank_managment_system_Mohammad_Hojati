@@ -1,3 +1,15 @@
+'''
+APM:
+dar class transaction niazi b default baraye sootone type nist.
+hamchnin yadeton bashe bekahhdi default bezarid fght miseh yek value gozasht na do value
+hamchjnin az qutation bayad estefade shavad yani 'deposit' doroste, na deposit
+
+moafagh bashid
+
+
+
+'''
+
 # '''
 # Class --> vasl bshe b sootone databaset
 #
