@@ -5,9 +5,6 @@ hamchnin yadeton bashe bekahhdi default bezarid fght miseh yek value gozasht na 
 hamchjnin az qutation bayad estefade shavad yani 'deposit' doroste, na deposit
 
 moafagh bashid
-
-
-
 '''
 
 # '''
