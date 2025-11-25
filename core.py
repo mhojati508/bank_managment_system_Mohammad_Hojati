@@ -30,7 +30,12 @@ dar har koja az note ha agar moshkel ya soal dashtid haminja rahat beporsid
 moafagh bashid
 
 
-NOTE 4 -->
+NOTE 4 --> bebinid dar tabeye deposit baratoon dorost krdm
+vaghty kasi deposit kard in deposit amountesh kamel dar tabel transaction sabt mishe
+shoma bayad hamchin chizi ro baraye whitdraw va transfer ham bzarid 
+k user harkari k kard , yani pool keshid , pol variz krd ya harchi haamsh sabt she
+vaghty k tabeye show_transaction ro bekhad negah kone , in tabe bayad tamame dade haye oon user ro print kon
+
 '''
 
 from database import get_session
@@ -134,6 +139,13 @@ class AdminPanel:
         elif amount > 0:
             account.balance = account.balance + amount
             self.session.commit()
+
+            #******* inja note 4 
+            transaction = Transaction(amount=amount , from_account_id=account_id , to_account_id=account_id , type = 'deposition')
+            self.session.add(transaction)
+            self.session.commit()
+            #-------
+            
             return account
         else:
             raise ValueError("Deposit amount must be positive")
