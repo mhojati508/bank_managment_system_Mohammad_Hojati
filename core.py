@@ -1,42 +1,4 @@
-#salam ostad vaght bekheir. kheli mamanon az nazarat arzeshmandetun. eslahati ke farmude budid anjam dadam be joz Note4
-#ke motasefaneh koli fekr kardam vali natunestam be natijeh beresam. mamnoon misham bishtar rahnamii befrmaiid. 
-'''
-APM: Kheyli awli
-
-Note 1 : 
-    fght dar fucntion create_account , vaghty card number ro misaze bayad
-    bere va tooye database begarde bebine in card number vojod nadashte bashe 
-    age vojod dahst ( khob nemish ecard number tkrari dad pas jadid hads mizane)
-    mishe az While estefade krd inja ( albate baraye porozhe niazi nist ama besoorate real world 
-    eshare kardam)
-
-
-Note 2 :
-    Print ha bayad ghable return bashand agar bekhahid ejra beshanavd (man sahih krdm dar tabeye withdraw()
-
-Note3 :
-    hamchenin bad az elif dar tabeye withdraw() , yek else gozashtam ke age mojodi kafi nabod
-    be moshtari bege k mojoodi nadari. hamin kar ra dar tavabeye digar piade konid (mesle transfer)
-
-Note4:
-    baraye tabeye show_transaction() , shoma bayad harjaee k deposit ya withdraw hast
-    yek data varede tabel transaction konid k hame pardakhti ha o hamechi sabt beshe
-    badesh avghty az show_transaction() estefade sho tamame record haye databse ro 
-    neshoon bede
-
-
-
-dar har koja az note ha agar moshkel ya soal dashtid haminja rahat beporsid
-moafagh bashid
-
-
-NOTE 4 --> bebinid dar tabeye deposit baratoon dorost krdm
-vaghty kasi deposit kard in deposit amountesh kamel dar tabel transaction sabt mishe
-shoma bayad hamchin chizi ro baraye whitdraw va transfer ham bzarid 
-k user harkari k kard , yani pool keshid , pol variz krd ya harchi haamsh sabt she
-vaghty k tabeye show_transaction ro bekhad negah kone , in tabe bayad tamame dade haye oon user ro print kon
-
-'''
+#salam ostad kheli mamnoonam az rhnami awli va kameli ke zahmat keshidid. cod ha ro kamel kardam ke khedmateton ersal mikonam.  
 
 from database import get_session
 from utils import hash_password, check_password
@@ -162,45 +124,67 @@ class AdminPanel:
             print(f'account {account_id} not found')
             raise Exception(f'Account with id {account_id} not found')
       
-        elif amount < account.balance:
+        if amount <=0:
+            raise ValueError("withdraw amount must be positive")
+        elif amount > account.balance: 
+            raise ValueError("your balance is not enough for withdraw")
+        else:
             account.balance = account.balance - amount
+            self.session.add(account)
             self.session.commit()
             print(f"your account balance is: {account.balance}")
-            return account
-    
-        else:
-            print('your balance is not enough for withdraw')
-            return None
-    
 
-    def transfer(self, from_account_id: int, to_account_id: int, amount: float)-> tuple[Account, Account, Account]:
-        from_account = self.session.get(Account, from_account_id)
-        
-        if not from_account:
-            print(f'account {from_account_id} not found')
-            raise Exception(f'Account with id {from_account_id} not found')
-        to_account= self.session.get(Account, to_account_id)
-        if not to_account:
-            print(f'To-account {to_account_id} not found')
-            raise Exception(f'Account with id {to_account_id} not found')
-        
-        if from_account_id == to_account_id:
-            raise ValueError("Cannot transfer to the same account")
-        
-        if amount <= 0:
-            raise ValueError("Transfer amount must be positive")
-
-        
-        elif  amount < from_account.balance:
-            from_account.balance -= amount
-            to_account.balance += amount
+            transaction = Transaction(amount=amount , from_account_id=account_id , to_account_id=None , type = 'withdraw')
+            self.session.add(transaction)
             self.session.commit()
-            return f'withdraw from {from_account_id}, deposit to {to_account_id}, amount {amount} '
-        
-        else:
-            print('your balance is not enough for transfer')
-            return None
-        
+            return account
+
+    def transfer(self, from_account_id: int, to_account_id: int, amount: float) -> tuple[Account, Account]:
+      from_account = self.session.get(Account, from_account_id)
+      if not from_account:
+        print(f'account {from_account_id} not found')
+        raise Exception(f'Account with id {from_account_id} not found')
+
+      to_account = self.session.get(Account, to_account_id)
+      if not to_account:
+        print(f'To-account {to_account_id} not found')
+        raise Exception(f'Account with id {to_account_id} not found')
+    
+      if from_account_id == to_account_id:
+        raise ValueError("Cannot transfer to the same account")
+    
+      if amount <= 0:
+        raise ValueError("Transfer amount must be positive")
+    
+      if amount > from_account.balance:
+        print("your balance is not enough")
+        raise ValueError("Insufficient balance")
+      if not from_account:
+        print(f'account {from_account_id} not found')
+        raise Exception(f'Account with id {from_account_id} not found')
+      to_account = self.session.get(Account, to_account_id)
+      if not to_account:
+        print(f'To-account {to_account_id} not found')
+        raise Exception(f'Account with id {to_account_id} not found')
+    
+      if from_account_id == to_account_id:
+        raise ValueError("Cannot transfer to the same account")
+    
+      if amount <= 0:
+        raise ValueError("Transfer amount must be positive")
+    
+      if amount > from_account.balance:
+        print("your balance is not enough")
+        raise ValueError("Insufficient balance")
+
+      from_account.balance -= amount
+      to_account.balance += amount
+      self.session.commit()
+
+      transaction = Transaction(amount=amount, from_account_id=from_account_id, to_account_id=to_account_id, type="transfer")
+      self.session.add(transaction)
+      self.session.commit()
+      return from_account, to_account
 
     # '''
     #     account from --> pull balance+ --> farde dg
@@ -208,8 +192,11 @@ class AdminPanel:
 
 
 
-    def show_transaction(self, account_id: int)-> list[Account]:
-        account = self.session.get(Account, account_id)
-        if not account:
-            print(f'account {account_id} not found')
-            raise Exception(f'Account with id {account_id} not found')
+    def show_transaction(self, account_id: int):
+      transactions = self.session.query(Transaction).filter(Transaction.from_account_id == account_id or Transaction.to_account_id == account_id).all()
+      if not transactions:
+        print(f'No transactions found for account {account_id}')
+        return
+      for transaction in transactions:
+        print(f'Transaction: {transaction.amount} from {transaction.from_account_id} to {transaction.to_account_id} on {transaction.timestamp}')
+      return transactions
