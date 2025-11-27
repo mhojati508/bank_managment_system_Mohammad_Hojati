@@ -78,7 +78,7 @@ class Transaction(Base):
     amount=Column(Float,nullable=False)
     from_account_id=Column(Integer,Forigenkey("accounts.id"))
     to_account_id=Column(Integer,Forigenkey("accounts.id"))
-    type=Column(String,nullable=False,default=deposite or withdraw)
+    type=Column(String,nullable=False)
     times=Column(DateTime,defult=datetime.utcnow)
 
     accounts=releationship("Account",back_populates=transactions)
