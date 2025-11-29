@@ -6,7 +6,6 @@ hamchjnin az qutation bayad estefade shavad yani 'deposit' doroste, na deposit
 
 moafagh bashid
 '''
-
 # '''
 # Class --> vasl bshe b sootone databaset
 #
