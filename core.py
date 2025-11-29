@@ -1,11 +1,10 @@
-#salam ostad kheli mamnoonam az rhnami awli va kameli ke zahmat keshidid. cod ha ro kamel kardam ke khedmateton ersal mikonam.  
 '''
+Mohammad : salam ostad kheli mamnoonam az rhnami awli va kameli ke zahmat keshidid. cod ha ro kamel kardam ke khedmateton ersal mikonam.   
 
 APM:
 salam vaghty b hade 90% takmil resid behem payam bde telegram check mikonm ag ok bashe 
 nomre kamel sabt mikonam, ag niaz b taghir bashe ham khodm inja rahnamae mikonam
 moafagh bashi
-
 
 '''
 from database import get_session
