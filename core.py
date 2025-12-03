@@ -13,7 +13,6 @@ from models import Customer, Account, Transaction
 import numpy as np
 import random
 
-
 class AdminPanel:
     def __init__(self):
         self.session = get_session()
