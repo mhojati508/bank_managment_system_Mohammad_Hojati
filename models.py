@@ -36,8 +36,6 @@ moafagh bashid
 #
 # '''
 from datetime import datetime
-
-
 class Customer(Base):
     __tablename__ = "customers"
     id = Column(Integer, primary_key=True)
