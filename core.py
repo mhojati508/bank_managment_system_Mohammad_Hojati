@@ -11,7 +11,6 @@ class AdminPanel:
 
 
     def create_customer(self, name: str, email: str, age: int, phone: str, address: str)-> Customer:
-
         customer = Customer(name=name, email=email, age=age, phone=phone, address=address)
         self.session.add(customer)
         self.session.commit()
